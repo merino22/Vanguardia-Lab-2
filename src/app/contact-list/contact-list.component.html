@@ -1,0 +1,67 @@
+<div class="container">
+  <ngb-accordion [closeOthers]="true">
+    <ngb-panel *ngFor="let contact of contactsList">
+      <ng-template ngbPanelTitle>
+        <div>
+          <span>&#9733; {{contact.name}}</span>
+        </div>
+      </ng-template>
+      <ng-template ngbPanelContent>
+        <div class="row">
+          <div>
+            <h6>{{contact.title}}. {{contact.name}}</h6>
+            <h6>{{contact.email}}</h6>
+            <h6>{{contact.phone}}</h6>
+          </div>
+          <div class="ml-auto mr-3 mt-3">
+            <button class="btn btn-danger float-end" (click)="deleteContact(contact);">&#10008;</button>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
+</div>
+<br>
+<div class="col text-center">
+  <button class="btn btn-success" (click)="addContact();">Add Contact</button>
+</div>
+
+<div class="container">
+  <div *ngIf="saveEnabled">
+    <div class="card-text">
+      <form [formGroup]="formHere" (ngSubmit)="onSubmit();">
+        <div [hidden]="formControls['name'].valid || formControls['name'].pristine" class="alert alert-danger">
+          Name must contain at least 3 letters
+        </div>
+        <div [hidden]="formControls['email'].valid || formControls['email'].pristine" class="alert alert-danger">
+          Invalid Email
+        </div>
+        <div [hidden]="formControls['phone'].valid || formControls['phone'].pristine" class="alert alert-danger">
+          Phone is a required field
+        </div>
+        <div class="form-group">
+          Name:
+          <input type="text" formControlName="name" class="form-control" [value]="contact?.name">
+        </div>
+        <div class="form-group">
+          Email:
+          <input type="text" formControlName="email" class="form-control" [value]="contact?.email">
+        </div>
+        <div class="form-group">
+          Phone:
+          <input type="text" formControlName="phone" class="form-control" [value]="contact?.phone">
+        </div>
+        <div class="form-group">
+          Title:
+          <select name="title" id="title" class="form-control" formControlName="title" [value]="contact?.title" (change)="onChanged();" [(ngModel)]="selectedTitle">
+            <option [value]="title" *ngFor="let title of titles">{{title}}</option>
+          </select>
+          <input *ngIf="otherEnabled" type="text" formControlName="title" class="form-control" [value]="contact?.title">
+        </div>
+        <button type="submit" class="btn btn-block btn-primary" [disabled]="!formHere?.valid">
+          Agregar
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
